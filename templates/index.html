@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Clientes</title>
+</head>
+<body>
+    <h1>Lista de Clientes</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <ul>
+        {% for cliente in clientes %}
+            <li>{{ cliente['nome'] }} ({{ cliente['email'] }}) - <a href="{{ url_for('edit_cliente', id=cliente['id']) }}">Editar</a>
+                <form method="POST" action="{{ url_for('delete_cliente', id=cliente['id']) }}" style="display: inline;">
+                    <input type="hidden" name="_method" value="POST">
+                    <input type="submit" value="Excluir" onclick="return confirm('Tem certeza que deseja excluir?')">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Adicionar Novo Cliente</h2>
+    <form method="POST" action="{{ url_for('add_cliente') }}">
+        Nome: <input type="text" name="nome" required><br>
+        Email: <input type="email" name="email" required><br>
+        <input type="submit" value="Adicionar">
+    </form>
+</body>
+</html>
